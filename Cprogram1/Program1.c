@@ -3,39 +3,18 @@
 //
 
 #include <stdio.h>
+#include <string.h>
 
-// the bubble sort algorithm that will sort the sales array in descending order and keep the months array in sync
-void bubbleSort(float* sales, char* months, int size)
-{
-    int i, j;
-    float temp;
-    char temp2;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < (size - i - 1); j++)
-        {
-            if (sales[j] < sales[j+1])
-            {
-                temp = sales[j];
-                sales[j] = sales[j+1];
-                sales[j+1] = temp;
-                temp2 = months[j];
-                months[j] = months[j+1];
-                months[j+1] = temp2;
-            }
-        }
-    }
-}
 
 int main () {
     // create an array of months
-    char* months[12];
+    char *months[12];
     months[0] = "January";
     months[1] = "February";
     months[2] = "March";
     months[3] = "April";
     months[4] = "May";
-    months[5] ="June";
+    months[5] = "June";
     months[6] = "July";
     months[7] = "August";
     months[8] = "September";
@@ -45,10 +24,9 @@ int main () {
 
 
     // input a .txt file that has a floating point number on each line and put it into an array
-    FILE* file;
+    FILE *file;
     file = fopen("input.txt", "r");
-    if (file == NULL)
-    {
+    if (file == NULL) {
         perror("Error opening file");
         return 1;
     }
@@ -58,29 +36,24 @@ int main () {
     int i = 0;
 
 //    file = fopen("input.txt", "r");
-    while (fgets(line, sizeof(line), file))
-    {
+    while (fgets(line, sizeof(line), file)) {
         sscanf(line, "%f", &sales[i]);
         i++;
     }
     fclose(file);
     printf("Monthly sales report for 2022:\n");
     printf("Month\tSales\n");
-    for (i = 0; i < 12; i++)
-    {
-        printf("%s\t$%.2f", months[i], sales[i]);
+    for (i = 0; i < 12; i++) {
+        printf("%s\t$%.2f\n", months[i], sales[i]);
     }
     int min = 0, max = 0;
     float sum = 0;
     // iterate through the sales array to find the min and max values
-    for (i = 0; i < 12; i++)
-    {
-        if (sales[i] < sales[min])
-        {
+    for (i = 0; i < 12; i++) {
+        if (sales[i] < sales[min]) {
             min = i;
         }
-        if (sales[i] > sales[max])
-        {
+        if (sales[i] > sales[max]) {
             max = i;
         }
         sum += sales[i];
@@ -92,17 +65,36 @@ int main () {
     printf("Average sales:\t$%.2f\n", average);
 
     printf("Six-Month Moving Average Report:\n");
-    for (i = 0; i <= 6; i++)
-    {
-        float movingAverage = ((sales[i] + sales[i+1] + sales[i+2] + sales[i+3] + sales[i+4] + sales[i+5]) / 6);
-        printf("%s\t -\t%s\t$%.2f", months[i], months[i+5], movingAverage);
+    for (i = 0; i <= 6; i++) {
+        float movingAverage = ((sales[i] + sales[i + 1] + sales[i + 2] + sales[i + 3] + sales[i + 4] + sales[i + 5]) /
+                               6);
+        printf("%s\t -\t%s\t$%.2f\n", months[i], months[i + 5], movingAverage);
     }
 
     printf("Sales Report (Highest to Lowest):\n");
     printf("Month\tSales\n");
-    bubbleSort(sales, months, 12);
-    for (i = 0; i < 12; i++)
+    int j;
+    float tempSales;
+    char tempMonth[10]; // 10 is the max length of a month name
+    const int size = 12;
+
+    for (i = 0; i < size - 1; i++)
     {
-        printf("%s\t$%.2f", months[i], sales[i]);
+        for (j = 0; j < size - i - 1; j++)
+        {
+            if (sales[j] > sales[j + 1])
+            {
+                // swap sales
+                tempSales = sales[j];
+                sales[j] = sales[j + 1];
+                sales[j + 1] = tempSales;
+
+                // swap months.
+                strcpy(tempMonth, months[j]);
+                strcpy(months[j], months[j + 1]);
+                strcpy(months[j + 1], tempMonth);
+            }
+        }
     }
+    printf("%s\t$%.2f\n", months[i], sales[i]);
 }
