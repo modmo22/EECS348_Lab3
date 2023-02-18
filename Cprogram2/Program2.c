@@ -13,19 +13,19 @@
 
 void scorePermutations(int score)
 {
-    for (int td2 = 0; td2 <= score / TD2; td2++)
+    for (int safety = 0; safety <= score / SAFETY; safety++)
     {
-        for (int td1 = 0; td1 <= score / TD1; td1++)
+        for (int fg = 0; fg <= score / FG; fg++)
         {
-            for (int td = 0; td <= score / TD; td++)
+            for (int td2 = 0; td2 <= score / TD2; td2++)
             {
-                for (int fg = 0; fg <= score / FG; fg++)
+                for (int td1 = 0; td1 <= score / TD1; td1++)
                 {
-                    for (int safety = 0; safety <= score / SAFETY; safety++)
+                    for (int td = 0; td <= score / TD; td++)
                     {
-                        if (safety + fg + td + td1 + td2 == score)
+                        if (safety*SAFETY + fg*FG + td*TD + td1*TD1 + td2*TD2 == score)
                         {
-                            printf("%d safeties, %d field goals, %d touchdowns, %d touchdowns (1 pt), %d touchdowns (2 pts)\n", safety, fg, td, td1, td2);
+                            printf("%d safeties, %d field goals, %d touchdowns, %d touchdowns + FG, %d touchdowns + 2pt\n", safety, fg, td, td1, td2);
                         }
                     }
                 }
